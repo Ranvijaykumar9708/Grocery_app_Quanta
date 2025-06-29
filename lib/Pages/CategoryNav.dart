@@ -63,10 +63,7 @@ class _CategoryNavState extends State<CategoryNav> {
                         ),
                       ],
                     ),
-                    //const Icon(
-                      //CupertinoIcons.heart_circle,
-                      //size: 40,
-                    //),
+                    
                   ],
                 ),
               ],

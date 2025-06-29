@@ -470,7 +470,7 @@ class _CartpageState extends State<Cartpage> {
                                   PlaceOrderRequestModel
                                       placeOrderRequestModel =
                                       PlaceOrderRequestModel(
-                                          userId: userId!,
+                                          userId: int.parse(userId),
                                           addressId: 0,
                                           orderStatus: "Pending",
                                           subtotal: total,

@@ -138,30 +138,36 @@ class ProductService {
   }
 
   // Fetch product by ID
-  Future<Map<String, dynamic>?> fetchProductById(String productId) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/getProductById'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'product_id': int.parse(productId)}),
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['status'] == 1) {
-          return data['data'];
-        } else {
-          throw Exception(data['message']);
-        }
-      } else {
-        throw Exception(
-            'Failed to fetch product. Status: ${response.statusCode}');
-      }
-    } catch (error) {
-      print("Error fetching product by ID: $error");
-      return null;
+ Future<Map<String, dynamic>?> fetchProductById(String productId) async {
+  try {
+    final parsedId = int.tryParse(productId);
+    if (parsedId == null) {
+      throw Exception("Invalid product ID: $productId");
     }
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/getProductById'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'product_id': parsedId}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['status'] == 1) {
+        return data['data'];
+      } else {
+        throw Exception(data['message']);
+      }
+    } else {
+      throw Exception('Failed to fetch product. Status: ${response.statusCode}');
+    }
+  } catch (error) {
+    print("❌ Error fetching product by ID: $error");
+    return null;
   }
+}
+
+
 
   Future<List<Product>> getAllProducts() async {
     try {
@@ -721,30 +727,31 @@ class ProductService {
     }
   }
 
-  Future<OrderResponseModel> getAllOrders(context) async {
-    print("jsonResponse ");
-    try {
-      final response = await http.get(Uri.parse('$baseUrl/all-orders'));
+ Future<OrderResponseModel> getAllOrders(BuildContext context) async {
+  print("Fetching all orders...");
+  try {
+    final response = await http.get(Uri.parse('$baseUrl/all-orders'));
 
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        print("jsonResponse $jsonResponse");
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print("jsonResponse: $jsonResponse");
 
-        if (jsonResponse['status'] == 1) {
-          return OrderResponseModel.fromJson(jsonResponse.body);
-        } else {
-          throw Exception(
-              'Failed to load products: ${jsonResponse['message']}');
-        }
+      if (jsonResponse['status'] == 1) {
+        return OrderResponseModel.fromJson(jsonResponse); // ✅ fixed here
       } else {
-        throw Exception('Failed to load products: ${response.statusCode}');
+        throw Exception('Failed to load products: ${jsonResponse['message']}');
       }
-    } catch (e) {
-      print("Error fetching products: $e");
-      throw Exception('Failed to load products');
+    } else {
+      throw Exception('Failed to load products: ${response.statusCode}');
     }
+  } catch (e) {
+    print("Error fetching products: $e");
+    throw Exception('Failed to load products');
   }
+}
 
+  
+  
   Future<dynamic> updateOrderStatus(context, var data) async {
     print("jsonResponse ");
     print("${jsonEncode(data)}");

@@ -52,6 +52,7 @@ class Homescreen extends StatelessWidget {
                         children: [
                           Text(
                             "Poosarla's ",
+                             textAlign: TextAlign.start,
                             style: GoogleFonts.poppins(
                               fontSize: 26,
                               fontWeight: FontWeight.w700,
@@ -59,7 +60,7 @@ class Homescreen extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 12),
+                            padding: const EdgeInsets.only(left: 2),
                             child: Text(
                               'Warehouse',
                               style: GoogleFonts.poppins(

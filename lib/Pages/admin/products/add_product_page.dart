@@ -165,10 +165,10 @@ class _AddProductPageState extends State<AddProductPage> {
                       hintText: "Enter Short Description",
                     ),
 
-                    RichTextEditor(
-                      controller: quillController,
-                      label: 'Product Description',
-                    ),
+                    // RichTextEditor(
+                    //   controller: quillController,
+                    //   label: 'Product Description',
+                    // ),
                     // _buildTextField(
                     //   controller: productDescriptionController,
                     //   label: "Product Description",
