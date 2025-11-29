@@ -5,6 +5,7 @@ import 'package:e_commerce_grocery_application/Pages/models/place_order_request_
 import 'package:e_commerce_grocery_application/global_variable.dart';
 import 'package:e_commerce_grocery_application/services/product_api_services.dart';
 import 'package:e_commerce_grocery_application/utils/app_colors.dart';
+import 'package:e_commerce_grocery_application/utils/toast_message.dart';
 import 'package:flutter/material.dart';
 
 class SelectAddressPage extends StatefulWidget {
@@ -88,20 +89,14 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
       print("📩 Response: $res");
 
       if (res != null && res['status'] == 1) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Order Placed Successfully!"),
-          backgroundColor: Colors.green,
-        ));
+        ToastMessage.showSuccess("Order Placed Successfully!");
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Bottomnavbar()),
           (Route<dynamic> route) => false,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Failed to place order. Please try again."),
-          backgroundColor: Colors.red,
-        ));
+        ToastMessage.showError("Failed to place order. Please try again.");
       }
     } catch (error) {
       print("❌ Error in placeOrder: $error");
@@ -109,11 +104,7 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
       if (error.toString().contains("Exception:")) {
         errorMessage = error.toString().replaceFirst("Exception: ", "");
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(errorMessage),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 4),
-      ));
+      ToastMessage.showError(errorMessage, duration: 4);
     }
   }
 

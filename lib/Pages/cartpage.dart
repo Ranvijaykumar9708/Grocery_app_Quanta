@@ -4,6 +4,7 @@ import 'package:e_commerce_grocery_application/Pages/models/place_order_request_
 import 'package:e_commerce_grocery_application/global_variable.dart';
 import 'package:e_commerce_grocery_application/services/product_api_services.dart';
 import 'package:e_commerce_grocery_application/utils/app_colors.dart';
+import 'package:e_commerce_grocery_application/utils/toast_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -99,45 +100,58 @@ class _CartpageState extends State<Cartpage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isEmpty = cartDetailsModel?.data == null || 
+                    (cartDetailsModel?.data?.isEmpty ?? true);
+    
+    // Navigate back if cart is empty
+    if (isEmpty && isLoading == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pop(context);
+        ToastMessage.showInfo('Your cart is empty');
+      });
+    }
+    
     return Scaffold(
       body: isLoading == true
           ? Center(
               child: CircularProgressIndicator(
               color: Colors.red,
             ))
-          : Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: screenHeight * 0.17,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.03),
-                            child: Text(
-                              'Items',
-                              style: GoogleFonts.exo(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
+          : isEmpty
+              ? SizedBox.shrink()
+              : Stack(
+                  children: [
+                    SingleChildScrollView(
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: screenHeight * 0.17,
                               ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenHeight * 0.01,
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: cartDetailsModel?.data?.length ?? 0,
-                          itemBuilder: (BuildContext context, int index) {
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.03),
+                                  child: Text(
+                                    'Items',
+                                    style: GoogleFonts.exo(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.01,
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: cartDetailsModel?.data?.length ?? 0,
+                                itemBuilder: (BuildContext context, int index) {
                             return Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: SizedBox(
@@ -325,18 +339,7 @@ class _CartpageState extends State<Cartpage> {
                                                     );
 
                                                     //if (isDeleted) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                      SnackBar(
-                                                        content: Text(
-                                                            "Deleted successfully!"),
-                                                        backgroundColor:
-                                                            Colors.green,
-                                                        duration: Duration(
-                                                            seconds: 2),
-                                                      ),
-                                                    );
+                                                    ToastMessage.showSuccess("Deleted successfully!");
                                                     _callApi(); // Refresh the cart
                                                     // } else {
                                                     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -518,58 +521,58 @@ class _CartpageState extends State<Cartpage> {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 1,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    height: screenHeight * 0.15,
-                    width: screenWidth,
-                    color: AppColors.mainColor,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: screenHeight * 0.05),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Positioned(
+                      top: 1,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        height: screenHeight * 0.15,
+                        width: screenWidth,
+                        color: AppColors.mainColor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            SizedBox(height: screenHeight * 0.05),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8),
+                                          child: Text(
+                                            'My Cart',
+                                            style:
+                                                GoogleFonts.notoSerifOttomanSiyaq(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 8),
+                                      padding: const EdgeInsets.only(left: 9),
                                       child: Text(
-                                        'My Cart',
-                                        style:
-                                            GoogleFonts.notoSerifOttomanSiyaq(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w800,
+                                        'Deliciousness is Just a Tap Away!',
+                                        style: GoogleFonts.exo(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 9),
-                                  child: Text(
-                                    'Deliciousness is Just a Tap Away!',
-                                    style: GoogleFonts.exo(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
     );
   }
 }

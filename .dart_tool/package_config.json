@@ -212,6 +212,12 @@
       "languageVersion": "3.8"
     },
     {
+      "name": "fluttertoast",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/fluttertoast-8.2.14",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "get_it",
       "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/get_it-7.7.0",
       "packageUri": "lib/",

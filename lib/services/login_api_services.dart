@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e_commerce_grocery_application/Pages/bottomnavbar.dart';
 import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
+import 'package:e_commerce_grocery_application/utils/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,47 +29,17 @@ class ApiService {
           MaterialPageRoute(builder: (context) => Bottomnavbar()),
         );
         // Login successful
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-              content: Text(
-                "Login successful! Welcome ${responseData['data']['name']}",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.green,
-                    fontSize: 18),
-              )),
-        );
+        ToastMessage.showSuccess("Login successful! Welcome ${responseData['data']['name']}");
 
         // Navigate to the home screen or save user data for future use
 
         return responseData['data'];
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-              content: Text(
-                "Login failed! Something went wrong.",
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.redAccent,
-                    fontSize: 18),
-              )),
-        );
+        ToastMessage.showError("Login failed! Something went wrong.");
         throw Exception(responseData['message']);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-            content: Text(
-              "Login failed! Something went wrong.",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.redAccent,
-                  fontSize: 18),
-            )),
-      );
+      ToastMessage.showError("Login failed! Something went wrong.");
       throw Exception("Unexpected server response: ${response.body}");
     }
   }
@@ -102,45 +73,14 @@ class ApiService {
 
       if (responseData['status'] == 1) {
         // Login successful
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(
-                responseData['message'].toString(),
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 18),
-              )),
-        );
+        ToastMessage.showSuccess(responseData['message'].toString());
         return responseData;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-              content: Text(
-                responseData['message'],
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.redAccent,
-                    fontSize: 18),
-              )),
-        );
+        ToastMessage.showError(responseData['message']);
         throw Exception(responseData['message']);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-            content: Text(
-              "Creation failed! Something went wrong.",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.redAccent,
-                  fontSize: 18),
-            )),
-      );
+      ToastMessage.showError("Creation failed! Something went wrong.");
       throw Exception("Unexpected server response: ${response.body}");
     }
   }
@@ -177,31 +117,11 @@ class ApiService {
 
         return responseData;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-              content: Text(
-                responseData['message'],
-                style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.redAccent,
-                    fontSize: 18),
-              )),
-        );
+        ToastMessage.showError(responseData['message']);
         throw Exception(responseData['message']);
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: const Color.fromARGB(255, 226, 226, 226),
-            content: Text(
-              "Creation failed! Something went wrong.",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.redAccent,
-                  fontSize: 18),
-            )),
-      );
+      ToastMessage.showError("Creation failed! Something went wrong.");
       throw Exception("Unexpected server response: ${response.body}");
     }
   }

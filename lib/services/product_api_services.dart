@@ -6,6 +6,7 @@ import 'package:e_commerce_grocery_application/Pages/models/cart_details.dart';
 import 'package:e_commerce_grocery_application/Pages/models/user_details_model.dart';
 import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:e_commerce_grocery_application/global_variable.dart';
+import 'package:e_commerce_grocery_application/utils/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -274,34 +275,18 @@ class ProductService {
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
         if (data['status'] == 1) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(data['message']),
-            ),
-          );
+          ToastMessage.showSuccess(data['message']);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Cartpage()),
           );
           return data['data'];
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(data['message']),
-            ),
-          );
+          ToastMessage.showError(data['message']);
           throw Exception(data['message']);
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content:
-                Text("Failed to fetch product. Status: ${response.statusCode}"),
-          ),
-        );
+        ToastMessage.showError("Failed to fetch product. Status: ${response.statusCode}");
         throw Exception(
             'Failed to fetch product. Status: ${response.statusCode}');
       }
@@ -343,25 +328,14 @@ class ProductService {
         }
       } else {
         // Handle HTTP status code errors
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content:
-                Text("Failed to fetch cart. Status: ${response.statusCode}"),
-          ),
-        );
+        ToastMessage.showError("Failed to fetch cart. Status: ${response.statusCode}");
         return null;
       }
     } catch (error, _) {
       // Handle exceptions
       print("Error fetching cart by ID: $error");
       print("Error fetching cart by ID: $_");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("An error occurred: $error"),
-        ),
-      );
+      ToastMessage.showError("An error occurred: $error");
       return null;
     }
   }
@@ -385,43 +359,22 @@ class ProductService {
         final Map<String, dynamic> data = json.decode(response.body);
         // Check for success status in the API response
         if (data['status'] == 1) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.green,
-              content: Text(data['message'] ?? ''),
-            ),
-          );
+          ToastMessage.showSuccess(data['message'] ?? '');
           return CartDetailsModel.fromJson(data);
         } else {
           // Handle the case where status is not 1
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(data['message'] ?? 'Unknown error occurred'),
-            ),
-          );
+          ToastMessage.showError(data['message'] ?? 'Unknown error occurred');
           return null;
         }
       } else {
         // Handle HTTP status code errors
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content:
-                Text("Failed to fetch cart. Status: ${response.statusCode}"),
-          ),
-        );
+        ToastMessage.showError("Failed to fetch cart. Status: ${response.statusCode}");
         return null;
       }
     } catch (error) {
       // Handle exceptions
       print("Error fetching cart by ID: $error");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("An error occurred: $error"),
-        ),
-      );
+      ToastMessage.showError("An error occurred: $error");
       return null;
     }
   }
