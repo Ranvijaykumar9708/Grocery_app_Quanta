@@ -1,6 +1,7 @@
 import 'package:e_commerce_grocery_application/Pages/models/order_response_model.dart';
 import 'package:e_commerce_grocery_application/services/product_api_services.dart';
 import 'package:e_commerce_grocery_application/utils/app_colors.dart';
+import 'package:e_commerce_grocery_application/global_variable.dart';
 import 'package:flutter/material.dart';
 
 class UserOrdersPage extends StatefulWidget {
@@ -98,8 +99,10 @@ class _UserOrdersPageState extends State<UserOrdersPage> {
                                       Text("Order ID: ${order.id ?? ''}",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600, fontSize: 16)),
-                                      Text("Placed on: ${order.createdAt ?? ''}",
-                                          style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                                      Text(
+                                        "Placed on: ${order.createdAt != null ? formatDate(order.createdAt!) : 'N/A'}",
+                                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -218,7 +221,7 @@ class OrderDetailsPage extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             const SizedBox(height: 8),
             Text("Status: ${order.orderStatus}"),
-            Text("Placed on: ${order.createdAt}"),
+            Text("Placed on: ${order.createdAt != null ? formatDate(order.createdAt!) : 'N/A'}"),
             Text("Grand Total: ₹${order.grandTotal}"),
             const SizedBox(height: 12),
             const Text("Items:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

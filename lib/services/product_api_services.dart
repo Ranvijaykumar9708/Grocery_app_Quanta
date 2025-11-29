@@ -4,6 +4,7 @@ import 'package:e_commerce_grocery_application/Pages/cartpage.dart';
 import 'package:e_commerce_grocery_application/Pages/model_category.dart/product_model.dart';
 import 'package:e_commerce_grocery_application/Pages/models/cart_details.dart';
 import 'package:e_commerce_grocery_application/Pages/models/user_details_model.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:e_commerce_grocery_application/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,9 +13,6 @@ import 'package:http/http.dart';
 import '../Pages/models/order_response_model.dart';
 
 class ProductService {
-  final String baseUrl =
-      "https://quantapixel.in/ecommerce/grocery_app/public/api";
-  final String accessKey = "PMAT-01JDF1ZCPKHE7PXSVT9J6YG1AZ";
 
   Future<Response?> addProduct({
     required File productImage,
@@ -29,13 +27,12 @@ class ProductService {
     required String productDescription,
     required String Deliverycharge,
   }) async {
-    final uri = Uri.parse(
-        'https://quantapixel.in/ecommerce/grocery_app/public/api/storeProduct');
+    final uri = Uri.parse('${AppConstants.baseUrl}/storeProduct');
 
     final request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll({
-      "Authorization": "Bearer $accessKey", // Ensure accessKey is defined
+      "Authorization": "Bearer ${AppConstants.accessKey}", // Ensure accessKey is defined
       "Accept": "application/json",
     });
 
@@ -94,7 +91,7 @@ class ProductService {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse("$baseUrl/editProduct"),
+        Uri.parse("${AppConstants.baseUrl}/editProduct"),
       );
 
       // Add form fields
@@ -146,7 +143,7 @@ class ProductService {
     }
 
     final response = await http.post(
-      Uri.parse('$baseUrl/getProductById'),
+      Uri.parse('${AppConstants.baseUrl}/getProductById'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'product_id': parsedId}),
     );
@@ -171,7 +168,7 @@ class ProductService {
 
   Future<List<Product>> getAllProducts() async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/getAllProducts'));
+      final response = await http.get(Uri.parse('${AppConstants.baseUrl}/getAllProducts'));
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -197,9 +194,9 @@ class ProductService {
   Future<void> deleteProduct(int productId, String accessKey) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/deleteProduct'),
+        Uri.parse('${AppConstants.baseUrl}/deleteProduct'),
         headers: {
-          "Authorization": "Bearer $accessKey",
+          "Authorization": "Bearer ${AppConstants.accessKey}",
           "Content-Type": "application/json",
         },
         body: jsonEncode({
@@ -221,9 +218,9 @@ class ProductService {
   Future<void> updateStatus(int productId, String status) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/updateProductStatus'),
+        Uri.parse('${AppConstants.baseUrl}/updateProductStatus'),
         headers: {
-          "Authorization": "Bearer $accessKey",
+          "Authorization": "Bearer ${AppConstants.accessKey}",
           "Content-Type": "application/json",
         },
         body: jsonEncode({"product_id": productId, "status": status}),
@@ -245,9 +242,9 @@ class ProductService {
   Future<void> updateUserStatus(int productId, String status) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/updateUserStatus'),
+        Uri.parse('${AppConstants.baseUrl}/updateUserStatus'),
         headers: {
-          "Authorization": "Bearer $accessKey",
+          "Authorization": "Bearer ${AppConstants.accessKey}",
           "Content-Type": "application/json",
         },
         body: jsonEncode({"user_id": productId, "status": status}),
@@ -267,7 +264,7 @@ class ProductService {
   Future<Map<String, dynamic>?> addToCart(String productId, context) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/add-to-cart'),
+        Uri.parse('${AppConstants.baseUrl}/add-to-cart'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(
             {'product_id': productId, 'user_id': userId, 'quantity': 1}),
@@ -318,7 +315,7 @@ class ProductService {
     try {
       print(userId);
       final response = await http.post(
-        Uri.parse('$baseUrl/carts'),
+        Uri.parse('${AppConstants.baseUrl}/carts'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'user_id': userId}),
       );
@@ -374,7 +371,7 @@ class ProductService {
     try {
       print(cartId);
       final response = await http.post(
-        Uri.parse('$baseUrl/quantity'),
+        Uri.parse('${AppConstants.baseUrl}/quantity'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'cart_id': cartId, 'quantity': quantity}),
       );
@@ -433,7 +430,7 @@ class ProductService {
       BuildContext context, int? cartId) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/delete-cart'),
+        Uri.parse('${AppConstants.baseUrl}/delete-cart'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'user_id': userId, 'cart_id': cartId}),
       );
@@ -478,7 +475,7 @@ class ProductService {
   Future<Map<String, dynamic>?> fetchUsersList() async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/get-users'),
+        Uri.parse('${AppConstants.baseUrl}/get-users'),
         headers: {'Content-Type': 'application/json'},
       );
       if (response.statusCode == 200) {
@@ -502,7 +499,7 @@ class ProductService {
       BuildContext context, String? user_id) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/delete-user'),
+        Uri.parse('${AppConstants.baseUrl}/delete-user'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'user_id': user_id,
@@ -549,7 +546,7 @@ class ProductService {
   Future<Map<String, dynamic>?> fetchOrderList() async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/all-orders'),
+        Uri.parse('${AppConstants.baseUrl}/all-orders'),
         headers: {'Content-Type': 'application/json'},
       );
       if (response.statusCode == 200) {
@@ -573,7 +570,7 @@ class ProductService {
     try {
       print(userId);
       final response = await http.post(
-        Uri.parse('$baseUrl/user-orders'),
+        Uri.parse('${AppConstants.baseUrl}/user-orders'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'': userId}),
       );
@@ -627,7 +624,7 @@ class ProductService {
     try {
       print(userId);
       final response = await http.post(
-        Uri.parse('$baseUrl/sign-in'),
+        Uri.parse('${AppConstants.baseUrl}/sign-in'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'mobile': mobile, 'password': password}),
       );
@@ -680,7 +677,7 @@ class ProductService {
   Future<dynamic> fetchaddress(String userId) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/getAddress'),
+        Uri.parse('${AppConstants.baseUrl}/getAddress'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'user_id': int.parse(userId)}),
       );
@@ -705,7 +702,7 @@ class ProductService {
   Future<Map<String, dynamic>?> store_address(dynamic parameter) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/storeAddress'),
+        Uri.parse('${AppConstants.baseUrl}/storeAddress'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(parameter),
       );
@@ -730,7 +727,7 @@ class ProductService {
  Future<OrderResponseModel> getAllOrders(BuildContext context) async {
   print("Fetching all orders...");
   try {
-    final response = await http.get(Uri.parse('$baseUrl/all-orders'));
+    final response = await http.get(Uri.parse('${AppConstants.baseUrl}/all-orders'));
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -757,7 +754,7 @@ class ProductService {
     print("${jsonEncode(data)}");
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/updateOrderStatus'), body: data);
+          await http.post(Uri.parse('${AppConstants.baseUrl}/updateOrderStatus'), body: data);
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -789,7 +786,7 @@ class ProductService {
     Map<String, dynamic> data = {"user_id": userId};
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/get-profile'), body: data);
+          await http.post(Uri.parse('${AppConstants.baseUrl}/get-profile'), body: data);
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -820,7 +817,7 @@ class ProductService {
     };
     try {
       final response =
-          await http.post(Uri.parse('$baseUrl/edit-user'), body: data);
+          await http.post(Uri.parse('${AppConstants.baseUrl}/edit-user'), body: data);
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -841,7 +838,7 @@ class ProductService {
     }
   }
   Future<void> submitIssue(String subject, String description) async {
-  final url = Uri.parse('https://quantapixel.in/ecommerce/grocery_app/public/api/need-help');
+  final url = Uri.parse('${AppConstants.baseUrl}/need-help');
   
   try {
     final response = await http.post(
@@ -873,26 +870,49 @@ class ProductService {
 
 Future<dynamic> placeOrder(String userId,Map body) async {
     try {
+      print("🚀 Sending place order request to: ${AppConstants.baseUrl}/place-order");
       final response = await http.post(
-        Uri.parse('$baseUrl/place-order'),
+        Uri.parse('${AppConstants.baseUrl}/place-order'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(body),
       );
 
-      if (response.statusCode == 200) {
+      print("📡 Response Status Code: ${response.statusCode}");
+      print("📡 Response Body: ${response.body}");
+
+      // Accept both 200 (OK) and 201 (Created) as success status codes
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final data = json.decode(response.body);
         if (data['status'] == 1) {
-          return data['data'];
+          print("✅ Order placed successfully!");
+          return data; // Return full response so caller can check status
         } else {
-          throw Exception(data['message']);
+          final errorMessage = data['message'] ?? 'Unknown error occurred';
+          print("❌ API Error: $errorMessage");
+          throw Exception(errorMessage);
         }
       } else {
-        throw Exception(
-            'Failed to fetch product. Status: ${response.statusCode}');
+        // Try to parse error response
+        String errorMessage = 'Failed to place order. Status: ${response.statusCode}';
+        try {
+          final errorData = json.decode(response.body);
+          if (errorData['message'] != null) {
+            errorMessage = errorData['message'];
+          } else if (errorData['error'] != null) {
+            errorMessage = errorData['error'];
+          }
+        } catch (e) {
+          // If response body is not JSON, use the raw body
+          if (response.body.isNotEmpty) {
+            errorMessage = '${errorMessage}\nResponse: ${response.body}';
+          }
+        }
+        print("❌ Server Error: $errorMessage");
+        throw Exception(errorMessage);
       }
     } catch (error) {
-      print("Error Placing Order : $error");
-      return null;
+      print("❌ Error Placing Order: $error");
+      rethrow; // Re-throw to allow caller to handle it
     }
   }
 

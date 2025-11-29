@@ -1,4 +1,5 @@
 import 'package:e_commerce_grocery_application/Pages/order_confirmation.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:e_commerce_grocery_application/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert'; // For JSON decoding
@@ -32,7 +33,7 @@ class _FinalOrderDeliveryPageState extends State<FinalOrderDeliveryPage> {
 
   Future<Map<String, dynamic>> fetchOrderSummary() async {
     final response = await http.post(
-      Uri.parse('https://quantapixel.in/ecommerce/grocery_app/public/api/place-order'),
+      Uri.parse('${AppConstants.baseUrl}/place-order'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         "user_id": widget.userId,

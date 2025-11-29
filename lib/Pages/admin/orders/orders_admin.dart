@@ -1,5 +1,6 @@
 // import 'package:e_commerce_grocery_application/Pages/admin/OrderDetailPage_admin';
 import 'package:e_commerce_grocery_application/Pages/admin/orders/order_detail_page.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:e_commerce_grocery_application/global_variable.dart';
 import 'package:e_commerce_grocery_application/services/product_api_services.dart';
 import 'package:e_commerce_grocery_application/utils/app_colors.dart';
@@ -22,8 +23,7 @@ class _MakeOrderPageState extends State<MakeOrderPage> {
   String orderStatus = "";
 
   // API base URL
-  final String apiUrl =
-      "https://quantapixel.in/ecommerce/grocery_app/public/api/all-orders";
+  final String apiUrl = "${AppConstants.baseUrl}/all-orders";
 
   // Fetch Orders (Admin and User)
   Future<void> fetchOrders() async {

@@ -2,19 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:e_commerce_grocery_application/Pages/model_category.dart/model_category.dart';
 import 'package:e_commerce_grocery_application/Widgets/Categorieswidget.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 
 import 'package:http/http.dart' as http;
 
 class CategoryApiServices {
-  final String baseUrl =
-      "https://quantapixel.in/ecommerce/grocery_app/public/api";
-  final String accessKey = "PMAT-01JDF1ZCPKHE7PXSVT9J6YG1AZ";
 
   Future<void> addCategory(Map<String, String> fields, File imageFile) async {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('$baseUrl/add_categories'),
+        Uri.parse('${AppConstants.baseUrl}/add_categories'),
       );
 
       // Add fields (e.g., category name)
@@ -30,7 +28,7 @@ class CategoryApiServices {
 
       // Add headers
       request.headers.addAll({
-        "Authorization": "Bearer $accessKey",
+        "Authorization": "Bearer ${AppConstants.accessKey}",
         "Content-Type": "multipart/form-data",
       });
 
@@ -51,8 +49,7 @@ class CategoryApiServices {
   }
 
   Future<List<ModelCategory>> fetchCategories() async {
-    final response = await http.get(Uri.parse(
-        'https://quantapixel.in/ecommerce/grocery_app/public/api/get_categories'));
+    final response = await http.get(Uri.parse('${AppConstants.baseUrl}/get_categories'));
 
     if (response.statusCode == 200) {
       final List categories = json.decode(response.body)['data'];
@@ -65,9 +62,9 @@ class CategoryApiServices {
   Future<void> deleteCategory(int categoryId, String accessKey) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/delete_category'),
+        Uri.parse('${AppConstants.baseUrl}/delete_category'),
         headers: {
-          "Authorization": "Bearer $accessKey",
+          "Authorization": "Bearer ${AppConstants.accessKey}",
           "Content-Type": "application/json",
         },
         body: jsonEncode({
@@ -94,7 +91,7 @@ class CategoryApiServices {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('$baseUrl/edit_categories'),
+        Uri.parse('${AppConstants.baseUrl}/edit_categories'),
       );
       request.fields['category_name'] = CategoryName;
       request.fields['category_id'] = CategoryId;
@@ -117,7 +114,7 @@ class CategoryApiServices {
 
   Future<Map<String, dynamic>?> fetchSpecificCategory(int categoryId) async {
     try {
-      final url = Uri.parse("$baseUrl/get_category");
+      final url = Uri.parse("${AppConstants.baseUrl}/get_category");
 
       final response = await http.post(
         url,

@@ -2,15 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:e_commerce_grocery_application/Pages/model_category.dart/model_subcategory.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:http/http.dart' as http;
 
 class SubcategoryApiServices {
-  final String baseUrl =
-      "https://quantapixel.in/ecommerce/grocery_app/public/api";
-  final String accessKey = "PMAT-01JDF1ZCPKHE7PXSVT9J6YG1AZ";
   Future<List<ModelSubCategory>> fetchsubCategories() async {
     final response = await http.get(Uri.parse(
-        'https://quantapixel.in/ecommerce/grocery_app/public/api/get_sub_categories'));
+        '${AppConstants.baseUrl}/get_sub_categories'));
 
     if (response.statusCode == 200) {
       final List categories = json.decode(response.body)['data'];
@@ -23,10 +21,9 @@ class SubcategoryApiServices {
   Future<void> deletesubCategory(int categoryId, String accessKey) async {
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://quantapixel.in/ecommerce/grocery_app/public/api//delete_sub_category'),
+        Uri.parse('${AppConstants.baseUrl}/delete_sub_category'),
         headers: {
-          "Authorization": "Bearer $accessKey",
+          "Authorization": "Bearer ${AppConstants.accessKey}",
           "Content-Type": "application/json",
         },
         body: jsonEncode({
@@ -66,7 +63,7 @@ class SubcategoryApiServices {
 
       // Add headers
       request.headers.addAll({
-        "Authorization": "Bearer $accessKey",
+        "Authorization": "Bearer ${AppConstants.accessKey}",
         "Content-Type": "multipart/form-data",
       });
 
@@ -91,7 +88,7 @@ class SubcategoryApiServices {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('$baseUrl/add_sub_categories'),
+        Uri.parse('${AppConstants.baseUrl}/add_sub_categories'),
       );
 
       // Add fields (e.g., category name)
@@ -107,7 +104,7 @@ class SubcategoryApiServices {
 
       // Add headers
       request.headers.addAll({
-        "Authorization": "Bearer $accessKey",
+        "Authorization": "Bearer ${AppConstants.accessKey}",
         "Content-Type": "multipart/form-data",
       });
 

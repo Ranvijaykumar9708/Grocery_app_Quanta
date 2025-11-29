@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-//import 'package:e_commerce_grocery_application/Pages/admin/products/quill_text_widget.dart';
-import 'package:e_commerce_grocery_application/Pages/admin/products/quill_text_widget.dart';
 import 'package:e_commerce_grocery_application/Pages/model_category.dart/model_category.dart';
 import 'package:e_commerce_grocery_application/services/category_api_services.dart';
 import 'package:e_commerce_grocery_application/services/product_api_services.dart';
@@ -9,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 
 class AddProductPage extends StatefulWidget {
@@ -40,7 +36,6 @@ class _AddProductPageState extends State<AddProductPage> {
   TextEditingController productDescriptionController = TextEditingController();
   TextEditingController productshortDescriptionController =
       TextEditingController();
-  final quillController = quill.QuillController.basic();
   // Function to pick an image
   Future<void> pickImage({required int imageIndex}) async {
     try {
@@ -165,15 +160,11 @@ class _AddProductPageState extends State<AddProductPage> {
                       hintText: "Enter Short Description",
                     ),
 
-                    // RichTextEditor(
-                    //   controller: quillController,
-                    //   label: 'Product Description',
-                    // ),
-                    // _buildTextField(
-                    //   controller: productDescriptionController,
-                    //   label: "Product Description",
-                    //   hintText: "Enter Dcription",
-                    // ),
+                    _buildTextField(
+                      controller: productDescriptionController,
+                      label: "Product Description",
+                      hintText: "Enter Description",
+                    ),
                     const SizedBox(height: 20),
                     _buildImagePicker(
                       onRemoveImage: () => setState(() => selectedImage = null),
@@ -401,8 +392,7 @@ class _AddProductPageState extends State<AddProductPage> {
         productShortDescription:
             productshortDescriptionController.text.toString(),
 
-        productDescription:
-            jsonEncode(quillController.document.toDelta().toJson()),
+        productDescription: productDescriptionController.text.toString(),
       );
 
       if (response != null) {

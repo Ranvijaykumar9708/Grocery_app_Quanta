@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:e_commerce_grocery_application/Pages/bottomnavbar.dart';
+import 'package:e_commerce_grocery_application/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl =
-      "https://quantapixel.in/ecommerce/grocery_app/public/api";
 
   Future<Map<String, dynamic>> login(
       String mobile, String password, context) async {
-    final url = Uri.parse('$baseUrl/sign-in');
+    final url = Uri.parse('${AppConstants.baseUrl}/sign-in');
     final headers = {
       "Content-Type": "application/json",
     };
@@ -82,7 +81,7 @@ class ApiService {
       String? confirmPassword,
       String? address,
       context}) async {
-    final url = Uri.parse('$baseUrl/register');
+    final url = Uri.parse('${AppConstants.baseUrl}/register');
     final headers = {
       "Content-Type": "application/json",
     };
@@ -152,7 +151,7 @@ class ApiService {
       String? userid,
       String? address,
       context}) async {
-    final url = Uri.parse('$baseUrl/edit-user');
+    final url = Uri.parse('${AppConstants.baseUrl}/edit-user');
     final headers = {
       "Content-Type": "application/json",
     };

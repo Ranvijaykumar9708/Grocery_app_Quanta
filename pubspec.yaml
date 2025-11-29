@@ -41,7 +41,6 @@ dependencies:
   http:
   image_picker:
   dropdown_button2: ^2.0.6
-  flutter_quill: ^11.4.1
   url_launcher: ^6.3.1
   flutter_plugin_android_lifecycle: ^2.0.6
   intl: 
@@ -49,6 +48,9 @@ dependencies:
   carousel_slider: ^5.0.0
   cached_network_image: ^3.4.1
   flutter_staggered_animations: ^1.1.1
+  provider: ^6.1.1
+  get_it: ^7.6.4
+  equatable: ^2.0.5
 
 
   

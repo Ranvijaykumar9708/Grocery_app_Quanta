@@ -41,58 +41,78 @@ class _SelectAddressPageState extends State<SelectAddressPage> {
   }
 
   void placeOrder() async {
-    final selected = useraddressDetails[selectedIndex!];
-    final fullName = selected['name'].toString().split(" ");
-    final firstName = fullName.isNotEmpty ? fullName.first : "";
-    final lastName = fullName.length > 1 ? fullName.sublist(1).join(" ") : "";
+    try {
+      final selected = useraddressDetails[selectedIndex!];
+      print("📍 Selected Address Data: $selected");
+      
+      final fullName = selected['name'].toString().split(" ");
+      final firstName = fullName.isNotEmpty ? fullName.first : "";
+      final lastName = fullName.length > 1 ? fullName.sublist(1).join(" ") : "";
 
-    List<Map<String, dynamic>> prod = widget.placeOrderRequestModel!.products!
-        .map((p) => p.toJson())
-        .toList();
+      // Get address_id from the selected address (could be 'id' or 'address_id')
+      final addressId = selected['id'] ?? selected['address_id'] ?? 0;
+      print("📍 Address ID: $addressId");
 
-    Map<String, dynamic> body = {
-      "user_id": int.parse(userId),
-      "billing_first_name": firstName,
-      "billing_last_name": lastName,
-      "billing_email": selected['email'],
-      "billing_mobile": selected['mobile'],
-      "billing_city": selected['address'],
-      "billing_post_code": selected['pincode'],
-      "billing_address": selected['address'],
-      "shipping_first_name": firstName,
-      "shipping_last_name": lastName,
-      "shipping_email": selected['email'],
-      "shipping_mobile": selected['mobile'],
-      "shipping_city": selected['address'],
-      "shipping_post_code": selected['pincode'],
-      "shipping_address": selected['address'],
-      "order_status": "Pending",
-      "subtotal": widget.placeOrderRequestModel!.subtotal.toString(),
-      "savings": widget.placeOrderRequestModel!.savings.toString(),
-      "gst": widget.placeOrderRequestModel!.gst.toString(),
-      "grand_total": widget.placeOrderRequestModel!.grandTotal.toString(),
-      "products": prod,
-    };
+      List<Map<String, dynamic>> prod = widget.placeOrderRequestModel!.products!
+          .map((p) => p.toJson())
+          .toList();
 
-    print("📦 PlaceOrder JSON => ${jsonEncode(body)}");
+      Map<String, dynamic> body = {
+        "user_id": int.parse(userId),
+        "address_id": addressId is int ? addressId : int.tryParse(addressId.toString()) ?? 0,
+        "billing_first_name": firstName,
+        "billing_last_name": lastName,
+        "billing_email": selected['email'],
+        "billing_mobile": selected['mobile'],
+        "billing_city": selected['address'],
+        "billing_post_code": selected['pincode'],
+        "billing_address": selected['address'],
+        "shipping_first_name": firstName,
+        "shipping_last_name": lastName,
+        "shipping_email": selected['email'],
+        "shipping_mobile": selected['mobile'],
+        "shipping_city": selected['address'],
+        "shipping_post_code": selected['pincode'],
+        "shipping_address": selected['address'],
+        "order_status": "Pending",
+        "subtotal": widget.placeOrderRequestModel!.subtotal.toString(),
+        "savings": widget.placeOrderRequestModel!.savings.toString(),
+        "gst": widget.placeOrderRequestModel!.gst.toString(),
+        "grand_total": widget.placeOrderRequestModel!.grandTotal.toString(),
+        "products": prod,
+      };
 
-    final res = await ProductService().placeOrder(userId, body);
-    print("📩 Response: $res");
+      print("📦 PlaceOrder JSON => ${jsonEncode(body)}");
 
-    if (res != null && res['status'] == 1) {
+      final res = await ProductService().placeOrder(userId, body);
+      print("📩 Response: $res");
+
+      if (res != null && res['status'] == 1) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Order Placed Successfully!"),
+          backgroundColor: Colors.green,
+        ));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Bottomnavbar()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Failed to place order. Please try again."),
+          backgroundColor: Colors.red,
+        ));
+      }
+    } catch (error) {
+      print("❌ Error in placeOrder: $error");
+      String errorMessage = "Failed to place order. Please try again.";
+      if (error.toString().contains("Exception:")) {
+        errorMessage = error.toString().replaceFirst("Exception: ", "");
+      }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Order Placed Successfully!"),
-        backgroundColor: Colors.green,
-      ));
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => Bottomnavbar()),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Failed to place order. Try again."),
+        content: Text(errorMessage),
         backgroundColor: Colors.red,
+        duration: Duration(seconds: 4),
       ));
     }
   }

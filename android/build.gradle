@@ -1,6 +1,6 @@
 // Root build.gradle file
 buildscript {
-    ext.kotlin_version = '1.9.0'  // Ensure Kotlin version is compatible
+    ext.kotlin_version = '2.1.0'  // Ensure Kotlin version is compatible
 
     repositories {
         google()
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"  // Kotlin Gradle Plugin
     }
 }
